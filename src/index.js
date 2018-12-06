@@ -9,14 +9,13 @@ function Square(props) {
         </button>
     );
 }
-class Game extends React.Component {
+class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
             }],
-            stepNumber: 0,
             xIsNext: true,
         };
     }
@@ -96,15 +95,15 @@ class Game extends React.Component {
 }
 
 class Game extends React.Component {
-    //setting initial state for game component
     constructor(props) {
         super(props);
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
             }],
+            stepNumber: 0,
             xIsNext: true,
-        }
+        };
     }
 
     handleClick(i) {
