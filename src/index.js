@@ -1,25 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-/*class Square extends React.Component {
-   // constructor(props) {
-     //   super(props);
-     //   this.state = {
-     //       value: null,
-        }; 
-   render() {
-       return (
-           <button
-               className="square"
-               onClick={() => this.props.onClick()}
-           >
-               {this.props.value}
-           </button>
-       );
-   }
-}
-
-*/
 
 function Square(props) {
     return (
@@ -28,12 +9,14 @@ function Square(props) {
         </button>
     );
 }
-
-class Board extends React.Component {
+class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            squares: Array(9).fill(null),
+            history: [{
+                squares: Array(9).fill(null),
+            }],
+            stepNumber: 0,
             xIsNext: true,
         };
     }
@@ -125,7 +108,7 @@ class Game extends React.Component {
     }
 
     handleClick(i) {
-        const history = this.state.history;
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.lenght - 1];
         const squares = current.squares.slice();
 
@@ -138,14 +121,22 @@ class Game extends React.Component {
             history: history.concat([{
                 squares: squares
             }]),
+            stepNumber: history.lenght,
             xIsNext: !this.state.xIsNext,
+        });
+    }
+
+    jumpTo(step) {
+        this.setState({
+            stepNumber: step,
+            xIsNext: (step % 2) === 0,
         });
     }
 
     render() {
         //use most recent history to determine & display game status
         const history = this.state.history;
-        const current = history[history.length - 1];
+        const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
         // mapping over history
         const moves = history.map((step, move) => {
@@ -184,8 +175,8 @@ class Game extends React.Component {
 
 // ========================================
 
-ReactDOM.render(<
-    Game />,
+ReactDOM.render(
+    <Game />,
     document.getElementById('root')
 );
 
